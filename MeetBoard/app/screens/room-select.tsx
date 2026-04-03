@@ -1,6 +1,13 @@
 // app/screens/room-select.tsx
-import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router"; // Expo Router路由Hook
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import TextLabel from "../../components/common/TextLabel";
 import {
   GlobalLoading,
@@ -12,27 +19,35 @@ import {
   MeetingRoomItem,
 } from "../../hooks/useMeetingRoomLogic";
 import { Colors } from "../../constants/Colors";
-import { Spacing } from "../../constants/Spacing";
 import { Fonts, FontWeights } from "../../constants/Fonts";
+import { Spacing } from "../../constants/Spacing";
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const COLUMNS = 4;
+const CARD_SPACING = Spacing.lg;
+const CONTAINER_PADDING = Spacing.screenPadding;
+const CARD_WIDTH =
+  (SCREEN_WIDTH - CONTAINER_PADDING * 2 - CARD_SPACING * (COLUMNS - 1)) /
+  COLUMNS;
+
+const maskRoomId = (roomId: string) => {
+  if (roomId.length <= 10) return roomId;
+  return `${roomId.slice(0, 4)}••••••${roomId.slice(-4)}`;
+};
 
 export default function RoomSelectScreen() {
-  // 1. Expo Router路由实例
   const router = useRouter();
-  // 2. 调用核心业务Hook
   const {
     loading,
     roomList,
     isEmpty,
     errorMsg,
     fetchRoomList,
-    selectRoom: saveRoomInfo, // 重命名为存储逻辑
+    selectRoom: saveRoomInfo,
   } = useMeetingRoomLogic();
 
-  // 3. 选择会议室：存储+跳转详情页（Expo Router传参）
   const handleSelectRoom = async (room: MeetingRoomItem) => {
-    // 存储会议室信息到本地
     await saveRoomInfo(room);
-    // Expo Router跳转详情页，并传递参数
     router.push({
       pathname: "/screens/room-detail",
       params: {
@@ -42,51 +57,75 @@ export default function RoomSelectScreen() {
     });
   };
 
-  // 加载中
   if (loading) return <GlobalLoading />;
-
-  // 空数据
   if (isEmpty) return <EmptyData onRefresh={fetchRoomList} />;
-
-  // 接口异常
   if (errorMsg)
     return <ErrorState message={errorMsg} onRefresh={fetchRoomList} />;
 
-  // 渲染会议室列表
-  const renderRoomItem = ({ item }: { item: MeetingRoomItem }) => (
-    <TouchableOpacity
-      style={styles.roomItem}
-      onPress={() => handleSelectRoom(item)}
-      activeOpacity={0.9} // Expo触控反馈
-    >
-      <TextLabel
-        color={Colors.bgDark}
-        fontSize={Fonts.subTitle}
-        fontWeight={FontWeights.medium}
+  const renderRoomItem = ({
+    item,
+    index,
+  }: {
+    item: MeetingRoomItem;
+    index: number;
+  }) => {
+    const isLastInRow = (index + 1) % COLUMNS === 0;
+    return (
+      <TouchableOpacity
+        style={[styles.roomCard, !isLastInRow && styles.roomCardMargin]}
+        onPress={() => handleSelectRoom(item)}
+        activeOpacity={0.85}
       >
-        {item.name}
-      </TextLabel>
-    </TouchableOpacity>
-  );
+        <View style={styles.iconWrapper}>
+          <Ionicons
+            name="business-outline"
+            size={42}
+            color={Colors.primaryBlue}
+          />
+        </View>
+        <View style={styles.cardContent}>
+          <TextLabel
+            color={Colors.bgDark}
+            fontSize={Fonts.roomCardTitle}
+            fontWeight={FontWeights.bold}
+            style={styles.roomName}
+          >
+            {item.name}
+          </TextLabel>
+          <TextLabel
+            color={Colors.grayLight}
+            fontSize={Fonts.content}
+            fontWeight={FontWeights.medium}
+            style={styles.roomId}
+          >
+            Room ID: {maskRoomId(item.id)}
+          </TextLabel>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
       <TextLabel
         color={Colors.white}
-        fontSize={Fonts.title}
+        fontSize={Fonts.screenTitle}
         fontWeight={FontWeights.bold}
         style={styles.title}
       >
         选择会议室
       </TextLabel>
-      <FlatList
-        data={roomList}
-        renderItem={renderRoomItem}
-        keyExtractor={(item) => item.id}
-        style={styles.list}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContent} // Expo列表内边距优化
-      />
+      <View style={styles.listWrapper}>
+        <FlatList
+          data={roomList}
+          renderItem={renderRoomItem}
+          keyExtractor={(item) => item.id}
+          numColumns={COLUMNS}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
+          columnWrapperStyle={styles.row}
+        />
+      </View>
     </View>
   );
 }
@@ -94,24 +133,63 @@ export default function RoomSelectScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.bgDark,
-    padding: Spacing.lg,
+    backgroundColor: Colors.bgBlue,
+    paddingHorizontal: CONTAINER_PADDING,
+    paddingTop: Spacing.screenSectionGap,
+    paddingBottom: Spacing.screenSectionGap,
   },
   title: {
-    marginBottom: Spacing.lg,
     textAlign: "center",
+    lineHeight: Spacing.screenSectionGap,
+    marginBottom: Spacing.screenSectionGap,
   },
-  list: {
+  listWrapper: {
     flex: 1,
+    justifyContent: "center",
   },
   listContent: {
-    paddingBottom: Spacing.xl, // 避免列表底部被遮挡
+    justifyContent: "center",
   },
-  roomItem: {
+  row: {
+    marginBottom: CARD_SPACING,
+  },
+  roomCard: {
+    width: CARD_WIDTH,
+    minHeight: 164,
     backgroundColor: Colors.white,
-    padding: Spacing.md,
-    borderRadius: 8,
-    marginBottom: Spacing.sm,
-    elevation: 1, // Expo安卓阴影
+    borderRadius: 18,
+    paddingHorizontal: 20,
+    paddingVertical: 22,
+    flexDirection: "row",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.16,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  roomCardMargin: {
+    marginRight: CARD_SPACING,
+  },
+  iconWrapper: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: "rgba(24, 144, 255, 0.12)",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 18,
+    flexShrink: 0,
+  },
+  cardContent: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  roomName: {
+    lineHeight: 34,
+    marginBottom: 10,
+  },
+  roomId: {
+    lineHeight: 22,
   },
 });

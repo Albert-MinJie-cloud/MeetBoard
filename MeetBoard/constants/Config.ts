@@ -1,7 +1,9 @@
 // constants/Config.ts
 // 接口地址
 export const API_CONFIG = {
-  MEETING_ROOM_LIST: "http://你的后端地址/api/meeting-rooms", // 会议室列表接口
+  MEETING_ROOM_LIST: "http://localhost:3001/api/meeting-rooms", // 会议室列表接口
+  MEETING_LIST: "http://localhost:3001/api/meetings", // 会议列表接口
+  CURRENT_MEETING: "http://localhost:3001/api/meetings", // 当前会议接口
   TIMEOUT: 10000, // 接口超时时间（10秒）
 };
 

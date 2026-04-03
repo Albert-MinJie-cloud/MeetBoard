@@ -12,6 +12,8 @@ export const Fonts = {
   subTitle: 20, // 子标题（会议主题/下一场会议）
   content: 16, // 内容文字（时间/预约人）
   small: 14, // 小文字（会议列表辅助信息）
+  screenTitle: 52, // 页面主标题
+  roomCardTitle: 26, // 会议室卡片标题
 };
 
 

@@ -12,8 +12,14 @@ export default function RootLayout() {
           name="(tabs)/index"
           options={{ headerShown: false, title: "MeetBoard" }} // 隐藏导航栏
         />
-        <Stack.Screen name="screens/room-detail" />
-        <Stack.Screen name="screens/room-select" />
+        <Stack.Screen
+          name="screens/room-detail"
+          options={{ headerShown: false, title: "MeetBoard" }} // 隐藏导航栏
+        />
+        <Stack.Screen
+          name="screens/room-select"
+          options={{ headerShown: false, title: "MeetBoard" }} // 隐藏导航栏
+        />
         <Stack.Screen
           name="error"
           options={{ headerShown: false }} // 隐藏导航栏
