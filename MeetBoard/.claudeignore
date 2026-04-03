@@ -1,0 +1,85 @@
+# --------------------------
+# 1. 依赖与构建产物（必忽略）
+# --------------------------
+node_modules/
+.expo/
+.expo-shared/
+build/
+dist/
+ios/
+android/
+web-build/
+.cache/
+tmp/
+temp/
+
+# --------------------------
+# 2. 本地存储/缓存/配置（必忽略）
+# --------------------------
+.env
+.env.*
+!.env.example
+!.env.development.example
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+metro-cache/
+.husky/
+.prettierrc
+.eslintcache
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# --------------------------
+# 3. 测试/临时/调试文件（可选）
+# --------------------------
+__tests__/
+*.test.js
+*.test.ts
+*.test.tsx
+coverage/
+*.config.local.js
+*.local.ts
+
+# --------------------------
+# 4. 大文件/二进制/非源码（必忽略）
+# --------------------------
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+*.pdf
+*.zip
+*.rar
+*.tar.gz
+*.exe
+*.apk
+*.ipa
+*.db
+*.sqlite
+
+# --------------------------
+# 5. 保留需要的文件（取反）
+# --------------------------
+# 保留配置示例文件
+!.env.example
+!.gitignore
+!.prettierrc.js
+!.eslintrc.js
+# 保留核心源码目录（确保src/不被意外忽略）
+!src/
+!app/
+!assets/
+!components/
+!constants/
+!hooks/
+!services/
+!utils/
