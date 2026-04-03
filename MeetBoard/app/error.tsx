@@ -9,7 +9,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>投屏页面</Text>
+      <Text>错误页面</Text>
     </View>
   );
 }

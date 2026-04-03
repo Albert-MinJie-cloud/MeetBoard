@@ -3,7 +3,7 @@
     "name": "MeetBoard",
     "slug": "MeetBoard",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "landscape",
     "icon": "./assets/images/icon.png",
     "scheme": "meetboard",
     "userInterfaceStyle": "automatic",
