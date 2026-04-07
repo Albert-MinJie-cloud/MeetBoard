@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.bgDark,
+    backgroundColor: Colors.primaryBlue,
   },
   loadingText: {
     color: Colors.white,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.bgDark,
+    backgroundColor: Colors.primaryBlue,
     padding: Spacing.lg,
   },
   emptyText: {

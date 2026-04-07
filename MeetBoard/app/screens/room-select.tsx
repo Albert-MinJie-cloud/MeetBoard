@@ -85,7 +85,7 @@ export default function RoomSelectScreen() {
         </View>
         <View style={styles.cardContent}>
           <TextLabel
-            color={Colors.bgDark}
+            color={Colors.primaryBlue}
             fontSize={Fonts.roomCardTitle}
             fontWeight={FontWeights.bold}
             style={styles.roomName}
@@ -133,7 +133,7 @@ export default function RoomSelectScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.bgBlue,
+    backgroundColor: Colors.primaryBlue,
     paddingHorizontal: CONTAINER_PADDING,
     paddingTop: Spacing.screenSectionGap,
     paddingBottom: Spacing.screenSectionGap,

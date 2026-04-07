@@ -1,13 +1,10 @@
 // app/screens/room-detail.tsx
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  GestureResponderEvent,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router"; // Expo Router核心Hook
 import TextLabel from "../../components/common/TextLabel";
+import MeetingStatusBanner from "../../components/common/MeetingStatusBanner";
+import InfoRow from "../../components/common/InfoRow";
 import { RoomInfo, clearRoomInfo } from "../../utils/StorageService";
 import { DEBUG_CONFIG } from "../../constants/Config";
 import { Colors } from "../../constants/Colors";
@@ -38,7 +35,7 @@ export default function RoomDetailScreen() {
   };
 
   // 5. 连续点击屏幕触发重置（调试用）
-  const handleScreenClick = (e: GestureResponderEvent) => {
+  const handleScreenClick = () => {
     const now = Date.now();
     // 超出2秒时间窗口，重置计数
     if (now - lastClickTime > DEBUG_CONFIG.CLICK_INTERVAL) {
@@ -81,35 +78,118 @@ export default function RoomDetailScreen() {
 
   // 7. 正常渲染详情页
   return (
-    <View style={styles.container} onPress={handleScreenClick}>
-      {/* 会议室核心信息展示 */}
-      <View style={styles.infoWrapper}>
+    <View style={styles.container}>
+      {/* 顶部标题栏 */}
+      <View style={styles.header}>
         <TextLabel
           color={Colors.white}
-          fontSize={Fonts.title}
+          fontSize={Fonts.screenTitle}
           fontWeight={FontWeights.bold}
-          style={styles.roomName}
+          style={styles.meetingName}
         >
           {roomInfo.roomName}
         </TextLabel>
-        <TextLabel
-          color={Colors.grayLight}
-          fontSize={Fonts.content}
-          style={styles.roomId}
-        >
-          会议室ID：{roomInfo.roomId}
-        </TextLabel>
 
-        {/* 可选：添加会议室实时状态、预约信息等扩展内容 */}
-        <View style={styles.statusWrapper}>
-          <TextLabel
-            color={Colors.redActive}
-            fontSize={Fonts.content}
-            style={styles.statusText}
-          >
-            设备在线
+        <View style={styles.meetingTimeInfo}>
+          <TextLabel color={Colors.white} fontSize={24}>
+            10:30
+          </TextLabel>
+          <TextLabel color={Colors.white} fontSize={24}>
+            04月03日
+          </TextLabel>
+          <TextLabel color={Colors.white} fontSize={24}>
+            星期四
           </TextLabel>
         </View>
+      </View>
+
+      {/* 会议信息展示区域 */}
+      <View style={styles.meetingContainer} onTouchEnd={handleScreenClick}>
+        <ScrollView
+          style={styles.scrollContent}
+          contentContainerStyle={styles.scrollInner}
+          showsVerticalScrollIndicator={false}
+        >
+        {/* 左侧：当前会议 */}
+        <View style={styles.currentMeeting}>
+          <MeetingStatusBanner status="active" />
+
+          <View style={styles.meetingInfo}>
+            <InfoRow title="会议时间" description="10:00—12:00" />
+            <InfoRow
+              title="会议主题"
+              description="北京分公司2026年第一季度经营分析会 第一次会议"
+            />
+            <InfoRow title="预约人" description="王阳" />
+          </View>
+        </View>
+
+        {/* 右侧：下一场会议列表 */}
+        <View style={styles.upcomingMeetings}>
+          <TextLabel
+            color={Colors.textDark}
+            fontSize={28}
+            fontWeight={FontWeights.bold}
+            style={styles.upcomingTitle}
+          >
+            下一场会议
+          </TextLabel>
+
+          <View style={styles.meetingList}>
+            <View style={styles.meetingItem}>
+              <TextLabel
+                color={Colors.textDark}
+                fontSize={20}
+                style={styles.itemTitle}
+              >
+                研发部软件新增功能讲解...
+              </TextLabel>
+              <TextLabel color={Colors.grayMedium} fontSize={18}>
+                10:50-12:30 | 美成锴
+              </TextLabel>
+            </View>
+
+            <View style={styles.meetingItem}>
+              <TextLabel
+                color={Colors.textDark}
+                fontSize={20}
+                style={styles.itemTitle}
+              >
+                销售部用业绩汇报会议
+              </TextLabel>
+              <TextLabel color={Colors.grayMedium} fontSize={18}>
+                11:40-12:40 | 周城员
+              </TextLabel>
+            </View>
+
+            <View style={styles.meetingItem}>
+              <TextLabel
+                color={Colors.textDark}
+                fontSize={20}
+                style={styles.itemTitle}
+              >
+                技术部产品破件培训会议
+              </TextLabel>
+              <TextLabel color={Colors.grayMedium} fontSize={18}>
+                14:00-15:30 | 王炜
+              </TextLabel>
+            </View>
+
+            <View style={styles.meetingItem}>
+              <TextLabel
+                color={Colors.textDark}
+                fontSize={20}
+                style={styles.itemTitle}
+              >
+                人事部新人培训会
+              </TextLabel>
+              <TextLabel color={Colors.grayMedium} fontSize={18}>
+                15:50-16:50 | 情长凤
+              </TextLabel>
+            </View>
+          </View>
+        </View>
+        </ScrollView>
       </View>
 
       {/* 常规重置按钮（固定底部右侧，Expo Router适配） */}
@@ -134,36 +214,74 @@ export default function RoomDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.bgDark,
-    padding: Spacing.lg,
-    justifyContent: "center",
+    backgroundColor: Colors.primaryBlue,
   },
-  infoWrapper: {
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: Spacing.xl,
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.xl,
+    paddingBottom: Spacing.lg,
+    fontSize: Fonts.screenTitle,
+    lineHeight: Spacing.screenSectionGap,
   },
-  roomName: {
-    marginBottom: Spacing.sm,
-    textAlign: "center",
+  meetingName: {
+    lineHeight: Spacing.screenSectionGap,
   },
-  roomId: {
-    fontSize: Fonts.content,
-    marginBottom: Spacing.lg,
+  meetingTimeInfo: {
+    display: "flex",
+    flexDirection: "row",
+    gap: Spacing.md,
   },
-  statusWrapper: {
-    marginTop: Spacing.md,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    backgroundColor: "rgba(0, 180, 0, 0.2)",
-    borderRadius: 4,
+  meetingContainer: {
+    flex: 1,
+    paddingHorizontal: Spacing.xl,
+    paddingBottom: Spacing.xl,
   },
-  statusText: {
+  scrollContent: {
+    flex: 1,
+  },
+  scrollInner: {
+    flexDirection: "row",
+    gap: Spacing.lg,
+    flexGrow: 1,
+  },
+  currentMeeting: {
+    flex: 1,
+    backgroundColor: Colors.white,
+    borderRadius: 8,
+    overflow: "hidden",
+  },
+  meetingInfo: {
+    padding: Spacing.lg,
+    gap: Spacing.lg,
+  },
+  upcomingMeetings: {
+    width: 320,
+    backgroundColor: Colors.white,
+    borderRadius: 8,
+    padding: Spacing.lg,
+  },
+  upcomingTitle: {
+    marginBottom: Spacing.md,
+  },
+  meetingList: {
+    gap: Spacing.md,
+  },
+  meetingItem: {
+    paddingVertical: Spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.grayLight,
+    gap: Spacing.xs,
+  },
+  itemTitle: {
     fontWeight: FontWeights.medium,
   },
   resetBtn: {
     position: "absolute",
-    bottom: Spacing.lg,
-    right: Spacing.lg,
+    bottom: Spacing.xxl,
+    right: Spacing.xxl,
     backgroundColor: Colors.primaryBlue,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
@@ -175,7 +293,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: Spacing.lg,
-    backgroundColor: Colors.bgDark,
+    backgroundColor: Colors.primaryBlue,
   },
   backBtn: {
     marginTop: Spacing.lg,

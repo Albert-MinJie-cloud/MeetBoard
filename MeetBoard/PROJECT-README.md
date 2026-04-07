@@ -24,12 +24,7 @@ MeetBoard/
 │ ├── Spacing.ts # 间距常量
 │ └── Api.ts # 接口常量（飞书API地址/配置）
 ├── hooks/ # 自定义Hooks（逻辑复用）
-│ ├── useMeetingData.ts # 获取/刷新飞书会议数据
-│ ├── useScreenAdapt.ts # 投屏屏幕适配Hook
-│ └── useInterval.ts # 定时刷新Hook
-├── services/ # 接口服务（数据层）
-│ ├── api.ts # 请求封装（axios/Expo Fetch）
-│ └── meeting.ts # 会议相关接口（获取日程、刷新数据）
+│ ├── useMeetingRoomLogic.ts # 获取会议室信息
 ├── utils/ # 工具函数
 │ ├── dateFormat.ts # 日期时间格式化（适配会议时间展示）
 │ ├── storage.ts # 本地缓存（AsyncStorage封装）

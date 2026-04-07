@@ -41,7 +41,7 @@ export default function CurrentMeeting({
         </TextLabel>
 
         <TextLabel
-          color={Colors.bgDark}
+          color={Colors.primaryBlue}
           fontSize={Fonts.subTitle}
           fontWeight={FontWeights.medium}
           style={styles.meetingTitle}

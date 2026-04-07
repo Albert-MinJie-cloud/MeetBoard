@@ -44,6 +44,6 @@ export default function MeetBoardMain() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.bgDark,
+    backgroundColor: Colors.primaryBlue,
   },
 });

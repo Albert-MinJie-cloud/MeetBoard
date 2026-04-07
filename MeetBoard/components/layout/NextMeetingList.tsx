@@ -21,7 +21,7 @@ interface NextMeetingListProps {
 const MeetingItem = ({ item }: { item: MeetingItemProps }) => (
   <View style={styles.meetingItem}>
     <TextLabel
-      color={Colors.bgDark}
+      color={Colors.primaryBlue}
       fontSize={Fonts.content}
       fontWeight={FontWeights.medium}
     >
@@ -41,7 +41,7 @@ export default function NextMeetingList({ meetings }: NextMeetingListProps) {
   return (
     <MeetingCard style={styles.wrapper}>
       <TextLabel
-        color={Colors.bgDark}
+        color={Colors.primaryBlue}
         fontSize={Fonts.subTitle}
         fontWeight={FontWeights.bold}
         style={styles.title}
